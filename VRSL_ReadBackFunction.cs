@@ -667,6 +667,17 @@ namespace VRSL{
             Color[] pixelData = reader.output;
             int startindex = 0;
             int index, xOffset, yOffset;
+
+            // Sanity check width and rowSize to see if they are not zero.
+            // If they are zero, then the Start event was never fired, likely
+            // from the object being disabled upon world load. This causes
+            // a DivideByZero error that the Unity editor's UDON exception handler
+            // catches, but the in-game one does not, resulting in VRChat hard crashing
+            if(width == 0 || rowSize == 0) {
+                Debug.LogError("VRSL-GPUReadback Function had width or rowSize of 0. This would cause divde by zero errors! Start() event was not executed.\nWas this object disabled on world load?");
+                return;
+            }
+
             if(reader.extendedUniverseMode)
             {       
                 for(int i = 0; i < Mathf.Min(Mathf.Max(size, 1), 512); i++)

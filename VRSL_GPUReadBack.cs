@@ -36,6 +36,19 @@ namespace VRSL{
             currentTime = 0.0f;
             output = new Color[texture.width * texture.height];
             SendCustomEventDelayedSeconds("_StartGPUReadback",startDelay);
+
+            // Sanity check all connected Readback Functions to see if they are enabled
+            // so if we try to update them they will have proper variable states
+            VRSL_ReadBackFunction rb;
+            for(int i = 0; i < functionReaders.Length; i++)
+            {
+                rb = functionReaders[i];
+                if(rb.gameObject.activeSelf == false) {
+                    Debug.LogWarning($"Found a GPU-Readback function that was not enabled! (Index {i})\nTemporarily enabling it for initialization...");
+                    rb.gameObject.SetActive(true); // Set to true so Start event fires
+                    rb.gameObject.SetActive(false); // Revert to disabled state
+                }
+            }
         }
 
         void Update()
@@ -90,7 +103,7 @@ namespace VRSL{
     public class VRSL_GPUReadBack_Editor : Editor
     {
         public static Texture logo;
-        public static string ver = "VRSL GPUReadback ver:" + " <b><color=#6a15ce> 1.0</color></b>";
+        public static string ver = "VRSL GPUReadback ver:" + " <b><color=#6a15ce> 1.1</color></b>";
          SerializedProperty functionReaders;
         void OnEnable()
         {

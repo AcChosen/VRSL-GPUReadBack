@@ -103,7 +103,7 @@ namespace VRSL{
     public class VRSL_GPUReadBack_Editor : Editor
     {
         public static Texture logo;
-        public static string ver = "VRSL GPUReadback ver:" + " <b><color=#6a15ce> 1.0</color></b>";
+        public static string ver = "VRSL GPUReadback ver:" + " <b><color=#6a15ce> 1.1</color></b>";
          SerializedProperty functionReaders;
         void OnEnable()
         {
